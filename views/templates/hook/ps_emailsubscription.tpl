@@ -1,5 +1,4 @@
-<?php
-/*
+{*
 * 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -22,14 +21,16 @@
 *  @copyright  2007-2015 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
-*/
-				    	
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-						
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-						
-header("Location: ../");
-exit;
+*}
+
+<div class="email_subscription">
+  <h4>{l s='Newsletter' mod='ps_emailsubscription'}</h4>
+  {if $msg}
+    <p class="notification {if $nw_error}notification-error{else}notification-success{/if}">{$msg}</p>
+  {/if}
+  <form action="{$urls.pages.index}" method="post">
+    <input type="text" name="email" value="{$value}" placeholder="{l s='Your e-mail' mod='ps_emailsubscription'}" />
+    <input type="submit" value="ok" name="submitNewsletter" />
+    <input type="hidden" name="action" value="0" />
+  </form>
+</div>

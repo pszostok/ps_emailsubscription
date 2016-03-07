@@ -27,7 +27,7 @@
 /**
  * @since 1.5.0
  */
-class BlocknewsletterVerificationModuleFrontController extends ModuleFrontController
+class Ps_EmailsubscriptionVerificationModuleFrontController extends ModuleFrontController
 {
 	private $message = '';
 

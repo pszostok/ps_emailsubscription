@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
 
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
-class blocknewsletter extends Module implements WidgetInterface
+class Ps_Emailsubscription extends Module implements WidgetInterface
 {
     const GUEST_NOT_REGISTERED = -1;
     const CUSTOMER_NOT_REGISTERED = 0;
@@ -39,8 +39,7 @@ class blocknewsletter extends Module implements WidgetInterface
 
     public function __construct()
     {
-        $this->name = 'blocknewsletter';
-        $this->tab = 'front_office_features';
+        $this->name = 'ps_emailsubscription';
         $this->need_instance = 0;
 
         $this->controllers = array('verification');
@@ -48,12 +47,12 @@ class blocknewsletter extends Module implements WidgetInterface
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->l('Newsletter block');
-        $this->description = $this->l('Adds a block for newsletter subscription.');
+        $this->displayName = $this->l('E-mail subscription form');
+        $this->description = $this->l('Adds a form for newsletter subscription.');
         $this->confirmUninstall = $this->l('Are you sure that you want to delete all of your contacts?');
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 
-        $this->version = '3.0.0';
+        $this->version = '1.0.0';
         $this->author = 'PrestaShop';
         $this->error = false;
         $this->valid = false;
@@ -336,7 +335,7 @@ class blocknewsletter extends Module implements WidgetInterface
     }
 
     /**
-     * Register in block newsletter
+     * Register in email subscription
      */
     protected function newsletterRegistration()
     {
@@ -687,7 +686,7 @@ class blocknewsletter extends Module implements WidgetInterface
     protected function sendVerificationEmail($email, $token)
     {
         $verif_url = Context::getContext()->link->getModuleLink(
-            'blocknewsletter', 'verification', array(
+            'ps_emailsubscription', 'verification', array(
                 'token' => $token,
             )
         );
@@ -697,11 +696,11 @@ class blocknewsletter extends Module implements WidgetInterface
 
     public function renderWidget($hookName = null, array $configuration = [])
     {
-        if (!$this->isCached('blocknewsletter.tpl', $this->getCacheId()) && !$this->error && !$this->valid) {
+        if (!$this->isCached('ps_emailsubscription.tpl', $this->getCacheId()) && !$this->error && !$this->valid) {
             $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
         }
 
-        return $this->display(__FILE__, 'blocknewsletter.tpl', $this->getCacheId());
+        return $this->display(__FILE__, 'ps_emailsubscription.tpl', $this->getCacheId());
     }
 
     public function getWidgetVariables($hookName = null, array $configuration = [])
@@ -734,8 +733,8 @@ class blocknewsletter extends Module implements WidgetInterface
      */
     public function hookActionCustomerAccountAdd($params)
     {
-        //if e-mail of the created user address has already been added to the newsletter through the blocknewsletter module,
-        //we delete it from blocknewsletter table to prevent duplicates
+        //if e-mail of the created user address has already been added to the newsletter through the ps_emailsubscription module,
+        //we delete it from ps_emailsubscription table to prevent duplicates
         $id_shop = $params['newCustomer']->id_shop;
         $email = $params['newCustomer']->email;
         if (Validate::isEmail($email)) {
@@ -856,7 +855,7 @@ class blocknewsletter extends Module implements WidgetInterface
                         'type' => 'select',
                         'label' => $this->l('Newsletter subscribers'),
                         'desc' => $this->l('Filter customers who have subscribed to the newsletter or not, and who have an account or not.'),
-                        'hint' => $this->l('Customers can subscribe to your newsletter when registering, or by entering their email in the newsletter block.'),
+                        'hint' => $this->l('Customers can subscribe to your newsletter when registering, or by entering their email in the newsletter form.'),
                         'name' => 'SUSCRIBERS',
                         'required' => false,
                         'default_value' => (int)$this->context->country->id,
@@ -994,7 +993,7 @@ class blocknewsletter extends Module implements WidgetInterface
                 fclose($fd);
                 $this->_html .= $this->displayConfirmation(
                     sprintf($this->l('The .CSV file has been successfully exported: %d customers found.'), $nb).'<br />
-                <a href="'.$this->context->shop->getBaseURI().'modules/blocknewsletter/'.Tools::safeOutput(strval(Tools::getValue('action'))).'_'.$this->file.'">
+                <a href="'.$this->context->shop->getBaseURI().'modules/ps_emailsubscription/'.Tools::safeOutput(strval(Tools::getValue('action'))).'_'.$this->file.'">
                 <b>'.$this->l('Download the file').' '.$this->file.'</b>
                 </a>
                 <br />

@@ -2,9 +2,9 @@
 require_once(dirname(__FILE__).'/../../config/config.inc.php');
 Tools::displayFileAsDeprecated();
 
-require_once('blocknewsletter.php');
+require_once('ps_emailsubscription.php');
 
-$module = new Blocknewsletter();
+$module = new Ps_Emailsubscription();
 
 if (!Module::isInstalled($module->name))
 	exit;
