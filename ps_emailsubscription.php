@@ -726,8 +726,10 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         $variables['value'] = Tools::getValue('email', '');
         $variables['msg'] = '';
-        $variables['need_confirmation'] = Configuration::get('NW_CONFIRMATION_OPTIN');
-        $variables['cms_page'] = Configuration::get('NW_CMS_PRIVACY_PAGE');
+        $variables['need_confirmation'] = (bool)Configuration::get('NW_CONFIRMATION_OPTIN');
+        if ($variables['need_confirmation']) {
+            $variables['cms_privacy_link'] = $this->context->link->getCMSLink((int)Configuration::get('NW_CMS_PRIVACY_PAGE'));
+        }
 
         if (Tools::isSubmit('submitNewsletter')) {
             $this->newsletterRegistration();
