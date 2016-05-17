@@ -33,7 +33,7 @@
     {if isset($need_confirmation) && $need_confirmation}
     <span class="custom-checkbox">
        <input type="checkbox" name="confirm-optin" value="1" required>
-       <label>{l s='I agree to receive newsletter emails and I am aware of [1]the privacy policy[/1]' tags=['<a href="%s">'|sprintf:$cms_privacy_link] mod='ps_emailsubscription'}</label>
+       <label>{l s='I agree to receive newsletter emails and I am aware of [1]the privacy policy[/1]' tags=['<a target="_blank" href="%s">'|sprintf:$cms_privacy_link] mod='ps_emailsubscription'}</label>
     </span>
     {/if}
     <input type="submit" value="ok" name="submitNewsletter" />
