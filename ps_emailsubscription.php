@@ -706,11 +706,15 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     public function renderWidget($hookName = null, array $configuration = [])
     {
-        if (!$this->isCached('ps_emailsubscription.tpl', $this->getCacheId()) && !$this->error && !$this->valid) {
+        $cacheId = $this->getCacheId();
+        if (Tools::isSubmit('submitNewsletter') || !$this->isCached('ps_emailsubscription.tpl', $cacheId)) {
             $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
         }
+        if (Tools::isSubmit('submitNewsletter')) {
+            $cacheId = null;
+        }
 
-        return $this->display(__FILE__, 'ps_emailsubscription.tpl', $this->getCacheId());
+        return $this->display(__FILE__, 'ps_emailsubscription.tpl', $cacheId);
     }
 
     public function getWidgetVariables($hookName = null, array $configuration = [])
