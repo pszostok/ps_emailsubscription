@@ -1026,7 +1026,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
             $conditions[$lang['id_lang']] = Tools::getValue(
-                'NW_CONDITIONS'.$lang['id_lang'],
+                'NW_CONDITIONS_'.$lang['id_lang'],
                 Configuration::get('NW_CONDITIONS', $lang['id_lang']
                 )
             );
