@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,18 +18,18 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2015 PrestaShop SA
+*  @copyright  2007-2016 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
 <div class="email_subscription">
-  <h4>{l s='Newsletter' mod='ps_emailsubscription'}</h4>
+  <h4>{l s='Newsletter' d='Modules.EmailSubscription.Shop'}</h4>
   {if $msg}
     <p class="notification {if $nw_error}notification-error{else}notification-success{/if}">{$msg}</p>
   {/if}
   <form action="{$urls.pages.index}" method="post">
-    <input type="text" name="email" value="{$value}" placeholder="{l s='Your e-mail' mod='ps_emailsubscription'}" />
+    <input type="text" name="email" value="{$value}" placeholder="{l s='Your e-mail' d='Modules.EmailSubscription.Shop'}" />
     {if $need_confirmation}
       <span class="custom-checkbox">
          <input type="checkbox" name="confirm-optin" value="1" required>
@@ -37,7 +37,7 @@
            {l
             s='I want to receive the free newsletter and have read and accepted the [1]conditions[/1].'
             tags=['<a onclick="alert(\'%s\')">'|sprintf:$conditions]
-            mod='ps_emailsubscription'
+            d='Modules.EmailSubscription.Shop'
            }
          </label>
       </span>
