@@ -122,7 +122,17 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     public function install()
     {
-        if (!parent::install() || !Configuration::updateValue('PS_NEWSLETTER_RAND', rand().rand()) || !$this->registerHook(array('displayFooterBefore', 'actionCustomerAccountAdd'))) {
+        if (
+            !parent::install()
+            || !Configuration::updateValue('PS_NEWSLETTER_RAND', rand().rand())
+            || !$this->registerHook(
+                array(
+                    'displayFooterBefore',
+                    'actionCustomerAccountAdd',
+                    'additionalCustomerFormFields'
+                )
+            )
+        ) {
             return false;
         }
 
@@ -774,6 +784,25 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         }
 
         return true;
+    }
+
+    /**
+     * Add an extra FormField to ask for newsletter registration
+     *
+     * @param $params
+     *
+     * @return bool
+     */
+    public function hookAdditionalCustomerFormFields($params)
+    {
+        return (new FormField)
+                ->setName('newsletter')
+                ->setType('checkbox')
+                ->setLabel(
+                    $this->getTranslator()->trans(
+                        'Sign up for our newsletter', array(), 'Customer'
+                    )
+                );
     }
 
     public function renderForm()
