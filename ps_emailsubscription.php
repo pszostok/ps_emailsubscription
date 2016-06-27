@@ -796,14 +796,29 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
      */
     public function hookAdditionalCustomerFormFields($params)
     {
+        $label = '';
+
+        if ((bool)Configuration::get('NW_CONFIRMATION_OPTIN') && Configuration::get('NW_CONDITIONS', $this->context->language->id)) {
+            $label = $this->getTranslator()->trans(
+                'Sign up for our [1]newsletter[/1]',
+                array(
+                    '[1]' => '<a data-toggle="modal" data-target="#ps_emailsubscription-modal">',
+                    '[/1]' => '</a>'
+                ),
+                'Customer'
+            );
+        } else {
+            $label = $this->getTranslator()->trans(
+                'Sign up for our newsletter',
+                array(),
+                'Customer'
+            );
+        }
+
         return (new FormField)
                 ->setName('newsletter')
                 ->setType('checkbox')
-                ->setLabel(
-                    $this->getTranslator()->trans(
-                        'Sign up for our newsletter', array(), 'Customer'
-                    )
-                );
+                ->setLabel($label);
     }
 
     public function hookDisplayAfterBodyOpeningTag($params)
