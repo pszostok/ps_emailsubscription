@@ -129,7 +129,8 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 array(
                     'displayFooterBefore',
                     'actionCustomerAccountAdd',
-                    'additionalCustomerFormFields'
+                    'additionalCustomerFormFields',
+                    'displayAfterBodyOpeningTag',
                 )
             )
         ) {
@@ -803,6 +804,15 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'Sign up for our newsletter', array(), 'Customer'
                     )
                 );
+    }
+
+    public function hookDisplayAfterBodyOpeningTag($params)
+    {
+        $this->context->smarty->assign(array(
+            'need_confirmation' => (bool)Configuration::get('NW_CONFIRMATION_OPTIN'),
+            'conditions' => Configuration::get('NW_CONDITIONS', $this->context->language->id),
+        ));
+        return $this->context->smarty->fetch('module:ps_emailsubscription/views/templates/front/modal-content.tpl');
     }
 
     public function renderForm()
