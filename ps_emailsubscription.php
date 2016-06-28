@@ -122,7 +122,18 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     public function install()
     {
-        if (!parent::install() || !Configuration::updateValue('PS_NEWSLETTER_RAND', rand().rand()) || !$this->registerHook(array('displayFooterBefore', 'actionCustomerAccountAdd'))) {
+        if (
+            !parent::install()
+            || !Configuration::updateValue('PS_NEWSLETTER_RAND', rand().rand())
+            || !$this->registerHook(
+                array(
+                    'displayFooterBefore',
+                    'actionCustomerAccountAdd',
+                    'additionalCustomerFormFields',
+                    'displayAfterBodyOpeningTag',
+                )
+            )
+        ) {
             return false;
         }
 
@@ -137,7 +148,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         Configuration::updateValue('NW_CONFIRMATION_OPTIN', false);
 
         return Db::getInstance()->execute('
-        CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'newsletter` (
+        CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'emailsubscription` (
             `id` int(6) NOT NULL AUTO_INCREMENT,
             `id_shop` INTEGER UNSIGNED NOT NULL DEFAULT \'1\',
             `id_shop_group` INTEGER UNSIGNED NOT NULL DEFAULT \'1\',
@@ -152,7 +163,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     public function uninstall()
     {
-        Db::getInstance()->execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'newsletter');
+        Db::getInstance()->execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'emailsubscription');
 
         return parent::uninstall();
     }
@@ -191,7 +202,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
             if (preg_match('/(^N)/', $id)) {
                 $id = (int)substr($id, 1);
-                $sql = 'UPDATE '._DB_PREFIX_.'newsletter SET active = 0 WHERE id = '.$id;
+                $sql = 'UPDATE '._DB_PREFIX_.'emailsubscription SET active = 0 WHERE id = '.$id;
                 Db::getInstance()->execute($sql);
             } else {
                 $c = new Customer((int)$id);
@@ -332,7 +343,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     public function isNewsletterRegistered($customer_email)
     {
         $sql = 'SELECT `email`
-                FROM '._DB_PREFIX_.'newsletter
+                FROM '._DB_PREFIX_.'emailsubscription
                 WHERE `email` = \''.pSQL($customer_email).'\'
                 AND id_shop = '.$this->context->shop->id;
 
@@ -433,12 +444,12 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $customers = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($dbquery->build());
 
         $dbquery = new DbQuery();
-        $dbquery->select('CONCAT(\'N\', n.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, n.`email`, n.`active` AS `subscribed`, n.`newsletter_date_add`');
-        $dbquery->from('newsletter', 'n');
-        $dbquery->leftJoin('shop', 's', 's.id_shop = n.id_shop');
-        $dbquery->where('n.`active` = 1');
+        $dbquery->select('CONCAT(\'N\', e.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, e.`email`, e.`active` AS `subscribed`, e.`newsletter_date_add`');
+        $dbquery->from('emailsubscription', 'e');
+        $dbquery->leftJoin('shop', 's', 's.id_shop = e.id_shop');
+        $dbquery->where('e.`active` = 1');
         if ($this->_searched_email) {
-            $dbquery->where('n.`email` LIKE \'%'.pSQL($this->_searched_email).'%\' ');
+            $dbquery->where('e.`email` LIKE \'%'.pSQL($this->_searched_email).'%\' ');
         }
 
         $non_customers = Db::getInstance()->executeS($dbquery->build());
@@ -496,7 +507,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     protected function unregister($email, $register_status)
     {
         if ($register_status == self::GUEST_REGISTERED) {
-            $sql = 'DELETE FROM '._DB_PREFIX_.'newsletter WHERE `email` = \''.pSQL($_POST['email']).'\' AND id_shop = '.$this->context->shop->id;
+            $sql = 'DELETE FROM '._DB_PREFIX_.'emailsubscription WHERE `email` = \''.pSQL($_POST['email']).'\' AND id_shop = '.$this->context->shop->id;
         } elseif ($register_status == self::CUSTOMER_REGISTERED) {
             $sql = 'UPDATE '._DB_PREFIX_.'customer SET `newsletter` = 0 WHERE `email` = \''.pSQL($_POST['email']).'\' AND id_shop = '.$this->context->shop->id;
         }
@@ -535,7 +546,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
      */
     protected function registerGuest($email, $active = true)
     {
-        $sql = 'INSERT INTO '._DB_PREFIX_.'newsletter (id_shop, id_shop_group, email, newsletter_date_add, ip_registration_newsletter, http_referer, active)
+        $sql = 'INSERT INTO '._DB_PREFIX_.'emailsubscription (id_shop, id_shop_group, email, newsletter_date_add, ip_registration_newsletter, http_referer, active)
                 VALUES
                 ('.$this->context->shop->id.',
                 '.$this->context->shop->id_shop_group.',
@@ -558,7 +569,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     public function activateGuest($email)
     {
         return Db::getInstance()->execute(
-            'UPDATE `'._DB_PREFIX_.'newsletter`
+            'UPDATE `'._DB_PREFIX_.'emailsubscription`
                         SET `active` = 1
                         WHERE `email` = \''.pSQL($email).'\''
         );
@@ -574,7 +585,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     protected function getGuestEmailByToken($token)
     {
         $sql = 'SELECT `email`
-                FROM `'._DB_PREFIX_.'newsletter`
+                FROM `'._DB_PREFIX_.'emailsubscription`
                 WHERE MD5(CONCAT( `email` , `newsletter_date_add`, \''.pSQL(Configuration::get('NW_SALT')).'\')) = \''.pSQL($token).'\'
                 AND `active` = 0';
 
@@ -608,7 +619,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     {
         if (in_array($register_status, array(self::GUEST_NOT_REGISTERED, self::GUEST_REGISTERED))) {
             $sql = 'SELECT MD5(CONCAT( `email` , `newsletter_date_add`, \''.pSQL(Configuration::get('NW_SALT')).'\')) as token
-                    FROM `'._DB_PREFIX_.'newsletter`
+                    FROM `'._DB_PREFIX_.'emailsubscription`
                     WHERE `active` = 0
                     AND `email` = \''.pSQL($email).'\'';
         } elseif ($register_status == self::CUSTOMER_NOT_REGISTERED) {
@@ -770,10 +781,53 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $id_shop = $params['newCustomer']->id_shop;
         $email = $params['newCustomer']->email;
         if (Validate::isEmail($email)) {
-            return (bool)Db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'newsletter WHERE id_shop='.(int)$id_shop.' AND email=\''.pSQL($email)."'");
+            return (bool)Db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'emailsubscription WHERE id_shop='.(int)$id_shop.' AND email=\''.pSQL($email)."'");
         }
 
         return true;
+    }
+
+    /**
+     * Add an extra FormField to ask for newsletter registration
+     *
+     * @param $params
+     *
+     * @return bool
+     */
+    public function hookAdditionalCustomerFormFields($params)
+    {
+        $label = '';
+
+        if ((bool)Configuration::get('NW_CONFIRMATION_OPTIN') && Configuration::get('NW_CONDITIONS', $this->context->language->id)) {
+            $label = $this->getTranslator()->trans(
+                'Sign up for our [1]newsletter[/1]',
+                array(
+                    '[1]' => '<a data-toggle="modal" data-target="#ps_emailsubscription-modal">',
+                    '[/1]' => '</a>'
+                ),
+                'Customer'
+            );
+        } else {
+            $label = $this->getTranslator()->trans(
+                'Sign up for our newsletter',
+                array(),
+                'Customer'
+            );
+        }
+
+        return (new FormField)
+                ->setName('newsletter')
+                ->setType('checkbox')
+                ->setLabel($label);
+    }
+
+    public function hookDisplayAfterBodyOpeningTag($params)
+    {
+        $this->context->smarty->assign(array(
+            'need_confirmation' => (bool)Configuration::get('NW_CONFIRMATION_OPTIN'),
+            'conditions' => Configuration::get('NW_CONDITIONS', $this->context->language->id),
+        ));
+        return $this->context->smarty->fetch('module:ps_emailsubscription/views/templates/front/modal-content.tpl');
     }
 
     public function renderForm()
@@ -1150,12 +1204,12 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $non_customers = array();
         if (($who == 0 || $who == 2) && (!$optin || $optin == 2) && !$country) {
             $dbquery = new DbQuery();
-            $dbquery->select('CONCAT(\'N\', n.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, n.`email`, n.`active` AS `subscribed`, n.`newsletter_date_add`');
-            $dbquery->from('newsletter', 'n');
-            $dbquery->leftJoin('shop', 's', 's.id_shop = n.id_shop');
-            $dbquery->where('n.`active` = 1');
+            $dbquery->select('CONCAT(\'N\', e.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, e.`email`, e.`active` AS `subscribed`, e.`newsletter_date_add`');
+            $dbquery->from('emailsubscription', 'e');
+            $dbquery->leftJoin('shop', 's', 's.id_shop = e.id_shop');
+            $dbquery->where('e.`active` = 1');
             if ($id_shop) {
-                $dbquery->where('n.`id_shop` = '.$id_shop);
+                $dbquery->where('e.`id_shop` = '.$id_shop);
             }
             $non_customers = Db::getInstance()->executeS($dbquery->build());
         }
