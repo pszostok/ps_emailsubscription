@@ -34,9 +34,13 @@
       <span class="custom-checkbox">
          <input type="checkbox" name="confirm-optin" value="1" required>
          <label>
+           {* First tag [1][/1] is for a HTML tag. *}
            {l
             s='I want to receive the free newsletter and have read and accepted the [1]conditions[/1].'
-            tags=['<a onclick="alert(\'%s\')">'|sprintf:$conditions]
+            sprintf=[
+              '[1]' => '<a onclick="alert(\'%s\')">'|sprintf:$conditions,
+              '[/1]' => '</a>'
+            ]
             d='Modules.EmailSubscription.Shop'
            }
          </label>
