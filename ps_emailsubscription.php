@@ -192,7 +192,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
             $voucher = Tools::getValue('NW_VOUCHER_CODE');
             if ($voucher && !Validate::isDiscountName($voucher)) {
-                $this->_html .= $this->displayError($this->getTranslator()->trans('The voucher code is invalid.', array(), 'Admin.Notifications.Errors'));
+                $this->_html .= $this->displayError($this->getTranslator()->trans('The voucher code is invalid.', array(), 'Admin.Notifications.Error'));
             } else {
                 Configuration::updateValue('NW_VOUCHER_CODE', pSQL($voucher));
                 $this->_html .= $this->displayConfirmation($this->getTranslator()->trans('Settings updated', array(), 'Admin.Notifications.Success'));
