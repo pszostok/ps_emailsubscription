@@ -805,13 +805,13 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                     '[1]' => '<a data-toggle="modal" data-target="#ps_emailsubscription-modal">',
                     '[/1]' => '</a>'
                 ),
-                'Customer'
+                'Modules.EmailSubscription.Shop'
             );
         } else {
             $label = $this->getTranslator()->trans(
                 'Sign up for our newsletter',
                 array(),
-                'Customer'
+                'Modules.EmailSubscription.Shop'
             );
         }
 
