@@ -986,17 +986,17 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                     ),
                     array(
                         'type' => 'select',
-                        'label' => $this->getTranslator()->trans('Opt-in subscribers', array(), 'Modules.EmailSubscription.Admin'),
+                        'label' => $this->getTranslator()->trans('Partner offers subscribers', array(), 'Modules.EmailSubscription.Admin'),
                         'desc' => $this->getTranslator()->trans('Filter customers who have agreed to receive your partners\' offers or not.', array(), 'Modules.EmailSubscription.Admin'),
-                        'hint' => $this->getTranslator()->trans('Opt-in subscribers have agreed to receive your partners\' offers.', array(), 'Modules.EmailSubscription.Admin'),
+                        'hint' => $this->getTranslator()->trans('Partner offers subscribers have agreed to receive your partners\' offers.', array(), 'Modules.EmailSubscription.Admin'),
                         'name' => 'OPTIN',
                         'required' => false,
                         'default_value' => (int)$this->context->country->id,
                         'options' => array(
                             'query' => array(
                                 array('id' => 0, 'name' => $this->getTranslator()->trans('All customers', array(), 'Modules.EmailSubscription.Admin')),
-                                array('id' => 2, 'name' => $this->getTranslator()->trans('Opt-in subscribers', array(), 'Modules.EmailSubscription.Admin')),
-                                array('id' => 1, 'name' => $this->getTranslator()->trans('Opt-in non-subscribers', array(), 'Modules.EmailSubscription.Admin'))
+                                array('id' => 2, 'name' => $this->getTranslator()->trans('Partner offers subscribers', array(), 'Modules.EmailSubscription.Admin')),
+                                array('id' => 1, 'name' => $this->getTranslator()->trans('Partner offers non-subscribers', array(), 'Modules.EmailSubscription.Admin'))
                             ),
                             'id' => 'id',
                             'name' => 'name',
