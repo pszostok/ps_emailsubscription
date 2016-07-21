@@ -29,24 +29,24 @@
  */
 class Ps_EmailsubscriptionVerificationModuleFrontController extends ModuleFrontController
 {
-	private $message = '';
+    private $message = '';
 
-	/**
-	 * @see FrontController::postProcess()
-	 */
-	public function postProcess()
-	{
-		$this->message = $this->module->confirmEmail(Tools::getValue('token'));
-	}
+    /**
+     * @see FrontController::postProcess()
+     */
+    public function postProcess()
+    {
+        $this->message = $this->module->confirmEmail(Tools::getValue('token'));
+    }
 
-	/**
-	 * @see FrontController::initContent()
-	 */
-	public function initContent()
-	{
-		parent::initContent();
+    /**
+     * @see FrontController::initContent()
+     */
+    public function initContent()
+    {
+        parent::initContent();
 
-		$this->context->smarty->assign('message', $this->message);
-		$this->setTemplate('verification_execution.tpl');
-	}
+        $this->context->smarty->assign('message', $this->message);
+        $this->setTemplate('verification_execution.tpl');
+    }
 }
