@@ -142,9 +142,9 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $conditions = array();
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
-            $conditions[(int)$lang['id_lang']] = $this->getTranslator()->trans('Please inform your customers about the content of the newsletter, its frequency, the use of personal data and the ways to cancel the subscription.', array(), 'Modules.EmailSubscription.Admin');
+            $conditions[(int)$lang['id_lang']] = $this->getConditionFixtures($lang);
         }
-        Configuration::updateValue('NW_CONDITIONS', $conditions);
+        Configuration::updateValue('NW_CONDITIONS', $conditions, true);
         Configuration::updateValue('NW_CONFIRMATION_OPTIN', false);
 
         return Db::getInstance()->execute('
@@ -904,7 +904,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'lang' => true,
                         'name' => 'NW_CONDITIONS',
                         'cols' => 40,
-                        'rows' => 10,
+                        'rows' => 100,
                         'class' => 'rte',
                         'autoload_rte' => true,
                     ),
@@ -1226,5 +1226,22 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         if (!fwrite($fd, $line, 4096)) {
             $this->post_errors[] = $this->getTranslator()->trans('Error: Write access limited', array(), 'Modules.EmailSubscription.Admin').' '.dirname(__FILE__).'/'.$this->file.' !';
         }
+    }
+
+    private function getConditionFixtures($lang)
+    {
+        $locale = $lang['locale'];
+        return
+            $this->getTranslator()->trans('*** Edit this content with the module E-mail subscription form. Please inform your customers about newsletter conditions. ***', array(), 'Modules.EmailSubscription.Shop', $locale)
+            .'<br>'
+            .'<h3>'.$this->getTranslator()->trans('Newsletter content', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
+            .'<br>...<br>'
+            .'<h3>'.$this->getTranslator()->trans('Newsletter frequency', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
+            .'<br>...<br>'
+            .'<h3>'.$this->getTranslator()->trans('Use of personal email', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
+            .'<br>...<br>'
+            .'<h3>'.$this->getTranslator()->trans('Unsubscribing', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
+            .'<br>'.$this->getTranslator()->trans('You may cancel your newsletter subscription at any time. For this purpose, please find the contact details in our legal notice.', array(), 'Modules.EmailSubscription.Shop', $locale)
+        ;
     }
 }
