@@ -187,7 +187,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 $this->_html .= $this->displayError($this->getTranslator()->trans('Please, set newsletter conditions to display to your customers', array(), 'Modules.EmailSubscription.Admin'));
             } else {
                 Configuration::updateValue('NW_CONFIRMATION_OPTIN', $confirmation_optin);
-                Configuration::updateValue('NW_CONDITIONS', $conditions);
+                Configuration::updateValue('NW_CONDITIONS', $conditions, true);
             }
 
             $voucher = Tools::getValue('NW_VOUCHER_CODE');
