@@ -50,7 +50,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->getTranslator()->trans('E-mail subscription form', array(), 'Modules.EmailSubscription.Admin');
+        $this->displayName = $this->getTranslator()->trans('Newsletter subscription', array(), 'Modules.EmailSubscription.Admin');
         $this->description = $this->getTranslator()->trans('Adds a form for newsletter subscription.', array(), 'Modules.EmailSubscription.Admin');
         $this->confirmUninstall = $this->getTranslator()->trans('Are you sure that you want to delete all of your contacts?', array(), 'Modules.EmailSubscription.Admin');
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
@@ -1231,7 +1231,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $locale = $lang['locale'];
 
         return
-            $this->getTranslator()->trans('*** Edit this content with the module E-mail subscription form. Please inform your customers about newsletter conditions. ***', array(), 'Modules.EmailSubscription.Shop', $locale)
+            $this->getTranslator()->trans('*** Edit this content with the module Newsletter subscription. Please inform your customers about newsletter conditions. ***', array(), 'Modules.EmailSubscription.Shop', $locale)
             .'<br>'
             .'<h3>'.$this->getTranslator()->trans('Newsletter content', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
             .'<br>...<br>'
