@@ -130,7 +130,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                     'displayFooterBefore',
                     'actionCustomerAccountAdd',
                     'additionalCustomerFormFields',
-                    'displayAfterBodyOpeningTag',
                 )
             )
         ) {
@@ -145,7 +144,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             $conditions[(int) $lang['id_lang']] = $this->getConditionFixtures($lang);
         }
         Configuration::updateValue('NW_CONDITIONS', $conditions, true);
-        Configuration::updateValue('NW_CONFIRMATION_OPTIN', false);
 
         return Db::getInstance()->execute('
         CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'emailsubscription` (
@@ -173,7 +171,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         if (Tools::isSubmit('submitUpdate')) {
             Configuration::updateValue('NW_CONFIRMATION_EMAIL', (bool) Tools::getValue('NW_CONFIRMATION_EMAIL'));
             Configuration::updateValue('NW_VERIFICATION_EMAIL', (bool) Tools::getValue('NW_VERIFICATION_EMAIL'));
-            $confirmation_optin = (bool) Tools::getValue('NW_CONFIRMATION_OPTIN');
 
             $conditions = array();
             $languages = Language::getLanguages(false);
@@ -183,12 +180,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 }
             }
 
-            if ($confirmation_optin && empty($conditions)) {
-                $this->_html .= $this->displayError($this->getTranslator()->trans('Please, set newsletter conditions to display to your customers', array(), 'Modules.EmailSubscription.Admin'));
-            } else {
-                Configuration::updateValue('NW_CONFIRMATION_OPTIN', $confirmation_optin);
-                Configuration::updateValue('NW_CONDITIONS', $conditions, true);
-            }
+            Configuration::updateValue('NW_CONDITIONS', $conditions, true);
 
             $voucher = Tools::getValue('NW_VOUCHER_CODE');
             if ($voucher && !Validate::isDiscountName($voucher)) {
@@ -408,9 +400,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
                     return $this->valid = $this->getTranslator()->trans('A verification email has been sent. Please check your inbox.', array(), 'Modules.EmailSubscription.Shop');
                 } else {
-                    if ((bool) Configuration::get('NW_CONFIRMATION_OPTIN') && empty($_POST['confirm-optin'])) {
-                        return $this->error = $this->getTranslator()->trans('You must agree to receive the newsletter', array(), 'Modules.EmailSubscription.Shop');
-                    } elseif ($this->register($email, $register_status)) {
+                    if ($this->register($email, $register_status)) {
                         $this->valid = $this->getTranslator()->trans('You have successfully subscribed to this newsletter.', array(), 'Modules.EmailSubscription.Shop');
                     } else {
                         return $this->error = $this->getTranslator()->trans('An error occurred during the subscription process.', array(), 'Modules.EmailSubscription.Shop');
@@ -745,10 +735,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         $variables['value'] = Tools::getValue('email', '');
         $variables['msg'] = '';
-        $variables['need_confirmation'] = (bool) Configuration::get('NW_CONFIRMATION_OPTIN');
-        if ($variables['need_confirmation']) {
-            $variables['conditions'] = Configuration::get('NW_CONDITIONS', $this->context->language->id);
-        }
+        $variables['conditions'] = Configuration::get('NW_CONDITIONS', $this->context->language->id);
 
         if (Tools::isSubmit('submitNewsletter')) {
             $this->newsletterRegistration();
@@ -795,13 +782,10 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     {
         $label = '';
 
-        if ((bool) Configuration::get('NW_CONFIRMATION_OPTIN') && Configuration::get('NW_CONDITIONS', $this->context->language->id)) {
+        if (Configuration::get('NW_CONDITIONS', $this->context->language->id)) {
             $label = $this->getTranslator()->trans(
-                'Sign up for our [1]newsletter[/1]',
-                array(
-                    '[1]' => '<a data-toggle="modal" data-target="#ps_emailsubscription-modal">',
-                    '[/1]' => '</a>',
-                ),
+                'Sign up for our newsletter',
+                array(),
                 'Modules.EmailSubscription.Shop'
             );
         } else {
@@ -816,16 +800,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 ->setName('newsletter')
                 ->setType('checkbox')
                 ->setLabel($label);
-    }
-
-    public function hookDisplayAfterBodyOpeningTag($params)
-    {
-        $this->context->smarty->assign(array(
-            'need_confirmation' => (bool) Configuration::get('NW_CONFIRMATION_OPTIN'),
-            'conditions' => Configuration::get('NW_CONDITIONS', $this->context->language->id),
-        ));
-
-        return $this->context->smarty->fetch('module:ps_emailsubscription/views/templates/front/modal-content.tpl');
     }
 
     public function renderForm()
@@ -877,24 +851,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'name' => 'NW_VOUCHER_CODE',
                         'class' => 'fixed-width-md',
                         'desc' => $this->getTranslator()->trans('Leave blank to disable by default.', array(), 'Modules.EmailSubscription.Admin'),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->getTranslator()->trans('Require customers to accept newsletter conditions before subscribing', array(), 'Modules.EmailSubscription.Admin'),
-                        'name' => 'NW_CONFIRMATION_OPTIN',
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->getTranslator()->trans('Yes', array(), 'Admin.Global'),
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->getTranslator()->trans('No', array(), 'Admin.Global'),
-                            ),
-                        ),
-                        'default_value' => 0,
                     ),
                     array(
                         'type' => 'textarea',
@@ -1088,7 +1044,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             'NW_VERIFICATION_EMAIL' => Tools::getValue('NW_VERIFICATION_EMAIL', Configuration::get('NW_VERIFICATION_EMAIL')),
             'NW_CONFIRMATION_EMAIL' => Tools::getValue('NW_CONFIRMATION_EMAIL', Configuration::get('NW_CONFIRMATION_EMAIL')),
             'NW_VOUCHER_CODE' => Tools::getValue('NW_VOUCHER_CODE', Configuration::get('NW_VOUCHER_CODE')),
-            'NW_CONFIRMATION_OPTIN' => Tools::getValue('NW_CONFIRMATION_OPTIN', Configuration::get('NW_CONFIRMATION_OPTIN')),
             'NW_CONDITIONS' => $conditions,
             'COUNTRY' => Tools::getValue('COUNTRY'),
             'SUSCRIBERS' => Tools::getValue('SUSCRIBERS'),
