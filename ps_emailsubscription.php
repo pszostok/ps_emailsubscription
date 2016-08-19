@@ -859,8 +859,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'name' => 'NW_CONDITIONS',
                         'cols' => 40,
                         'rows' => 100,
-                        'class' => 'rte',
-                        'autoload_rte' => true,
                     ),
                 ),
                 'submit' => array(
