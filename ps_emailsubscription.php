@@ -780,22 +780,17 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
      */
     public function hookAdditionalCustomerFormFields($params)
     {
-        $label = '';
-
-        if (Configuration::get('NW_CONDITIONS', $this->context->language->id)) {
-            $label = $this->trans(
-                'Sign up for our newsletter',
-                array(),
-                'Modules.EmailSubscription.Shop'
-            );
-        } else {
-            $label = $this->trans(
-                'Sign up for our newsletter',
-                array(),
-                'Modules.EmailSubscription.Shop'
-            );
-        }
-
+        $label = $this->trans(
+            'Sign up for our newsletter[1][2]%conditions%[/2]',
+            array(
+                '[1]' => '<br>',
+                '[2]' => '<em>',
+                '%conditions%' => Configuration::get('NW_CONDITIONS', $this->context->language->id),
+                '[/2]' => '</em>',
+            ),
+            'Modules.EmailSubscription.Shop'
+        );
+        
         return (new FormField())
                 ->setName('newsletter')
                 ->setType('checkbox')
