@@ -1184,16 +1184,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $locale = $lang['locale'];
 
         return
-            $this->getTranslator()->trans('*** Edit this content with the module Newsletter subscription. Please inform your customers about newsletter conditions. ***', array(), 'Modules.EmailSubscription.Shop', $locale)
-            .'<br>'
-            .'<h3>'.$this->getTranslator()->trans('Newsletter content', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
-            .'<br>...<br>'
-            .'<h3>'.$this->getTranslator()->trans('Newsletter frequency', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
-            .'<br>...<br>'
-            .'<h3>'.$this->getTranslator()->trans('Use of personal email', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
-            .'<br>...<br>'
-            .'<h3>'.$this->getTranslator()->trans('Unsubscribing', array(), 'Modules.EmailSubscription.Shop', $locale).'</h3>'
-            .'<br>'.$this->getTranslator()->trans('You may cancel your newsletter subscription at any time. For this purpose, please find the contact details in our legal notice.', array(), 'Modules.EmailSubscription.Shop', $locale)
+            $this->getTranslator()->trans('This text will be displayed beneath the newsletter subscribe button. Leave empty to disable.', array(), 'Modules.EmailSubscription.Shop', $locale)
         ;
     }
 }
