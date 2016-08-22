@@ -30,21 +30,8 @@
   {/if}
   <form action="{$urls.pages.index}" method="post">
     <input type="text" name="email" value="{$value}" placeholder="{l s='Your e-mail' d='Modules.EmailSubscription.Shop'}" />
-    {if $need_confirmation}
-      <span class="custom-checkbox">
-         <input type="checkbox" name="confirm-optin" value="1" required>
-         <label>
-           {* First tag [1][/1] is for a HTML tag. *}
-           {l
-            s='I want to receive the free newsletter and have read and accepted the [1]conditions[/1].'
-            sprintf=[
-              '[1]' => '<a onclick="alert(\'%s\')">'|sprintf:$conditions,
-              '[/1]' => '</a>'
-            ]
-            d='Modules.EmailSubscription.Shop'
-           }
-         </label>
-      </span>
+    {if $conditions}
+      <p>{$conditions}</p>
     {/if}
     <input type="submit" value="ok" name="submitNewsletter" />
     <input type="hidden" name="action" value="0" />
