@@ -790,7 +790,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             ),
             'Modules.EmailSubscription.Shop'
         );
-        
+
         return (new FormField())
                 ->setName('newsletter')
                 ->setType('checkbox')
@@ -854,6 +854,12 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'name' => 'NW_CONDITIONS',
                         'cols' => 40,
                         'rows' => 100,
+                        'hint' => $this->trans(
+                            'This text will be displayed beneath the newsletter subscribe button.',
+                            array(),
+                            'Modules.EmailSubscription.Admin'
+                        ),
+                        'desc' => $this->trans('Leave blank to disable by default.', array(), 'Modules.EmailSubscription.Admin'),
                     ),
                 ),
                 'submit' => array(
@@ -1179,7 +1185,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $locale = $lang['locale'];
 
         return
-            $this->trans('This text will be displayed beneath the newsletter subscribe button. Leave empty to disable.', array(), 'Modules.EmailSubscription.Shop', $locale)
+            $this->trans('You may unsubscribe at any moment. For that purpose, please find our contact info in the legal notice.', array(), 'Modules.EmailSubscription.Shop', $locale)
         ;
     }
 }
