@@ -53,7 +53,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $this->displayName = $this->trans('Newsletter subscription', array(), 'Modules.EmailSubscription.Admin');
         $this->description = $this->trans('Adds a form for newsletter subscription.', array(), 'Modules.EmailSubscription.Admin');
         $this->confirmUninstall = $this->trans('Are you sure that you want to delete all of your contacts?', array(), 'Modules.EmailSubscription.Admin');
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
 
         $this->entity_manager = $entity_manager;
 
