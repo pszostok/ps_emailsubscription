@@ -682,7 +682,29 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
      */
     protected function sendVoucher($email, $code)
     {
-        return Mail::Send($this->context->language->id, 'newsletter_voucher', Mail::l('Newsletter voucher', $this->context->language->id), array('{discount}' => $code), $email, null, null, null, null, null, dirname(__FILE__).'/mails/', false, $this->context->shop->id);
+        $language = new Language($this->context->language->id);
+        return Mail::Send(
+            $this->context->language->id,
+            'newsletter_voucher',
+            $this->trans(
+                'Newsletter voucher',
+                array(),
+                'Emails.Subject',
+                $language->locale
+            ),
+            array(
+                '{discount}' => $code,
+            ),
+            $email,
+            null,
+            null,
+            null,
+            null,
+            null,
+            dirname(__FILE__).'/mails/',
+            false,
+            $this->context->shop->id
+        );
     }
 
     /**
@@ -694,7 +716,27 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
      */
     protected function sendConfirmationEmail($email)
     {
-        return Mail::Send($this->context->language->id, 'newsletter_conf', Mail::l('Newsletter confirmation', $this->context->language->id), array(), pSQL($email), null, null, null, null, null, dirname(__FILE__).'/mails/', false, $this->context->shop->id);
+        $language = new Language($this->context->language->id);
+        return Mail::Send(
+            $this->context->language->id,
+            'newsletter_conf',
+            $this->trans(
+                'Newsletter confirmation',
+                array(),
+                'Emails.Subject',
+                $language->locale
+            ),
+            array(),
+            pSQL($email),
+            null,
+            null,
+            null,
+            null,
+            null,
+            dirname(__FILE__).'/mails/',
+            false,
+            $this->context->shop->id
+        );
     }
 
     /**
@@ -712,8 +754,30 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'token' => $token,
             )
         );
+        $language = new Language($this->context->language->id);
 
-        return Mail::Send($this->context->language->id, 'newsletter_verif', Mail::l('Email verification', $this->context->language->id), array('{verif_url}' => $verif_url), $email, null, null, null, null, null, dirname(__FILE__).'/mails/', false, $this->context->shop->id);
+        return Mail::Send(
+            $this->context->language->id,
+            'newsletter_verif',
+            $this->trans(
+                'Email verification',
+                array(),
+                'Emails.Subject',
+                $language->locale
+            ),
+            array(
+                '{verif_url}' => $verif_url,
+            ),
+            $email,
+            null,
+            null,
+            null,
+            null,
+            null,
+            dirname(__FILE__).'/mails/',
+            false,
+            $this->context->shop->id
+        );
     }
 
     public function renderWidget($hookName = null, array $configuration = [])
