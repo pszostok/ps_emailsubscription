@@ -47,6 +47,6 @@ class Ps_EmailsubscriptionVerificationModuleFrontController extends ModuleFrontC
         parent::initContent();
 
         $this->context->smarty->assign('message', $this->message);
-        $this->setTemplate('verification_execution.tpl');
+        $this->setTemplate('module:ps_emailsubscription/views/templates/front/verification_execution.tpl');
     }
 }
