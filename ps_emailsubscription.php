@@ -106,8 +106,8 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                     'value_default' => 2,
                 ),
                 'OPTIN' => array(
-                    'title' => $this->trans('Opted-in subscribers', array(), 'Modules.EmailSubscription.Admin'),
-                    'desc' => $this->trans('Filter opted-in subscribers.', array(), 'Modules.EmailSubscription.Admin'),
+                    'title' => $this->trans('Opt-in subscribers', array(), 'Modules.EmailSubscription.Admin'),
+                    'desc' => $this->trans('Filter opt-in subscribers.', array(), 'Modules.EmailSubscription.Admin'),
                     'type' => 'select',
                     'value' => array(
                         0 => $this->trans('All customers', array(), 'Modules.EmailSubscription.Admin'),
