@@ -84,39 +84,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             foreach ($countries as $country) {
                 $countries_list[$country['id_country']] = $country['name'];
             }
-
-            // And filling fields to show !
-            $this->fields_export = array(
-                'COUNTRY' => array(
-                    'title' => $this->trans('Customers\' country', array(), 'Modules.EmailSubscription.Admin'),
-                    'desc' => $this->trans('Filter customers\' country.', array(), 'Modules.EmailSubscription.Admin'),
-                    'type' => 'select',
-                    'value' => $countries_list,
-                    'value_default' => 0,
-                ),
-                'SUSCRIBERS' => array(
-                    'title' => $this->trans('Newsletter subscribers', array(), 'Modules.EmailSubscription.Admin'),
-                    'desc' => $this->trans('Filter newsletter subscribers.', array(), 'Modules.EmailSubscription.Admin'),
-                    'type' => 'select',
-                    'value' => array(
-                        0 => $this->trans('All customers', array(), 'Modules.EmailSubscription.Admin'),
-                        2 => $this->trans('Subscribers', array(), 'Modules.EmailSubscription.Admin'),
-                        1 => $this->trans('Non-subscribers', array(), 'Modules.EmailSubscription.Admin'),
-                    ),
-                    'value_default' => 2,
-                ),
-                'OPTIN' => array(
-                    'title' => $this->trans('Opt-in subscribers', array(), 'Modules.EmailSubscription.Admin'),
-                    'desc' => $this->trans('Filter opt-in subscribers.', array(), 'Modules.EmailSubscription.Admin'),
-                    'type' => 'select',
-                    'value' => array(
-                        0 => $this->trans('All customers', array(), 'Modules.EmailSubscription.Admin'),
-                        2 => $this->trans('Subscribers', array(), 'Modules.EmailSubscription.Admin'),
-                        1 => $this->trans('Non-subscribers', array(), 'Modules.EmailSubscription.Admin'),
-                    ),
-                    'value_default' => 0,
-                ),
-            );
         }
     }
 
