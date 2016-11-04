@@ -57,7 +57,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         $this->entity_manager = $entity_manager;
 
-        $this->version = '1.1.5';
+        $this->version = '1.1.6';
         $this->author = 'PrestaShop';
         $this->error = false;
         $this->valid = false;
