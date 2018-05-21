@@ -34,7 +34,7 @@
       <p>{$conditions}</p>
     {/if}
     <input type="submit" value="ok" name="submitNewsletter" />
-    {hook h='displayGDPRConsent' mod='psgdpr' id_module=$id_module}
+    {hook h='displayGDPRConsent' id_module=$id_module}
     <input type="hidden" name="action" value="0" />
   </form>
 </div>
