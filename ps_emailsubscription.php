@@ -1264,7 +1264,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             if (Db::getInstance()->execute($sql)) {
                 return json_encode(true);
             }
-            return json_encode($this->trans('Newsletter subscription: Unable to delete customer using email.', array(), 'Modules.Emailsubscription.Admin'));
+            return json_encode($this->trans('Newsletter subscription: no email to delete, this customer has not registered.', array(), 'Modules.Emailsubscription.Admin'));
         }
     }
     public function hookActionExportGDPRData($customer)
@@ -1274,7 +1274,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             if ($res = Db::getInstance()->ExecuteS($sql)) {
                 return json_encode($res);
             }
-            return json_encode($this->trans('Newsletter subscription: Unable to export customer using email.', array(), 'Modules.Emailsubscription.Admin'));
+            return json_encode($this->trans('Newsletter subscription: no email to export, this customer has not registered.', array(), 'Modules.Emailsubscription.Admin'));
        }
    }
 }
