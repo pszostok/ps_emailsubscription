@@ -225,7 +225,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             ),
             'iso_code' => array(
                 'title' => $this->trans('Iso language', array(), 'Modules.Emailsubscription.Admin'),
-                'type' => 'date',
                 'search' => false,
             ),             
             'newsletter_date_add' => array(
