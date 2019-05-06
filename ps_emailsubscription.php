@@ -398,12 +398,13 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     public function getSubscribers()
     {
         $dbquery = new DbQuery();
-        $dbquery->select('c.`id_customer` AS `id`, s.`name` AS `shop_name`, gl.`name` AS `gender`, c.`lastname`, c.`firstname`, c.`email`, c.`newsletter` AS `subscribed`, c.`newsletter_date_add`');
+        $dbquery->select('c.`id_customer` AS `id`, s.`name` AS `shop_name`, gl.`name` AS `gender`, c.`lastname`, c.`firstname`, c.`email`, c.`newsletter` AS `subscribed`, c.`newsletter_date_add`, l.`iso_code`');
         $dbquery->from('customer', 'c');
         $dbquery->leftJoin('shop', 's', 's.id_shop = c.id_shop');
         $dbquery->leftJoin('gender', 'g', 'g.id_gender = c.id_gender');
         $dbquery->leftJoin('gender_lang', 'gl', 'g.id_gender = gl.id_gender AND gl.id_lang = '.(int) $this->context->employee->id_lang);
         $dbquery->where('c.`newsletter` = 1');
+        $dbquery->leftJoin('lang', 'l', 'l.id_lang = c.id_lang');        
         if ($this->_searched_email) {
             $dbquery->where('c.`email` LIKE \'%'.pSQL($this->_searched_email).'%\' ');
         }
