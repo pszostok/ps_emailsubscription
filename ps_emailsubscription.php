@@ -1103,7 +1103,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             if (!$nb = count($result)) {
                 $this->_html .= $this->displayError($this->trans('No customers found with these filters!', array(), 'Modules.Emailsubscription.Admin'));
             } elseif ($fd = @fopen(dirname(__FILE__).'/'.strval(preg_replace('#\.{2,}#', '.', Tools::getValue('action'))).'_'.$this->file, 'w')) {
-                $header = array('id', 'shop_name', 'gender', 'lastname', 'firstname', 'email', 'subscribed', 'subscribed_on');
+                $header = array('id', 'shop_name', 'gender', 'lastname', 'firstname', 'email', 'subscribed', 'subscribed_on','iso_language');
                 $array_to_export = array_merge(array($header), $result);
                 foreach ($array_to_export as $tab) {
                     $this->myFputCsv($fd, $tab);
@@ -1170,12 +1170,13 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $customers = array();
         if ($who == 1 || $who == 0 || $who == 3) {
             $dbquery = new DbQuery();
-            $dbquery->select('c.`id_customer` AS `id`, s.`name` AS `shop_name`, gl.`name` AS `gender`, c.`lastname`, c.`firstname`, c.`email`, c.`newsletter` AS `subscribed`, c.`newsletter_date_add`');
+            $dbquery->select('c.`id_customer` AS `id`, s.`name` AS `shop_name`, gl.`name` AS `gender`, c.`lastname`, c.`firstname`, c.`email`, c.`newsletter` AS `subscribed`, c.`newsletter_date_add`, l.`iso_code`');
             $dbquery->from('customer', 'c');
             $dbquery->leftJoin('shop', 's', 's.id_shop = c.id_shop');
             $dbquery->leftJoin('gender', 'g', 'g.id_gender = c.id_gender');
             $dbquery->leftJoin('gender_lang', 'gl', 'g.id_gender = gl.id_gender AND gl.id_lang = '.$this->context->employee->id_lang);
             $dbquery->where('c.`newsletter` = '.($who == 3 ? 0 : 1));
+            $dbquery->leftJoin('lang', 'l', 'l.id_lang = c.id_lang')
             if ($optin == 2 || $optin == 1) {
                 $dbquery->where('c.`optin` = '.($optin == 1 ? 0 : 1));
             }
@@ -1196,10 +1197,11 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $non_customers = array();
         if (($who == 0 || $who == 2) && (!$optin || $optin == 2) && !$country) {
             $dbquery = new DbQuery();
-            $dbquery->select('CONCAT(\'N\', e.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, e.`email`, e.`active` AS `subscribed`, e.`newsletter_date_add`');
+            $dbquery->select('CONCAT(\'N\', e.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, e.`email`, e.`active` AS `subscribed`, e.`newsletter_date_add`, l.`iso_code`');
             $dbquery->from('emailsubscription', 'e');
             $dbquery->leftJoin('shop', 's', 's.id_shop = e.id_shop');
             $dbquery->where('e.`active` = 1');
+            $dbquery->leftJoin('lang', 'l', 'l.id_lang = e.id_lang');
             if ($id_shop) {
                 $dbquery->where('e.`id_shop` = '.$id_shop);
             }
