@@ -223,6 +223,11 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'active' => 'subscribed',
                 'search' => false,
             ),
+            'iso_code' => array(
+                'title' => $this->trans('Iso language', array(), 'Modules.Emailsubscription.Admin'),
+                'type' => 'date',
+                'search' => false,
+            ),             
             'newsletter_date_add' => array(
                 'title' => $this->trans('Subscribed on', array(), 'Modules.Emailsubscription.Admin'),
                 'type' => 'date',
@@ -406,9 +411,10 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $customers = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($dbquery->build());
 
         $dbquery = new DbQuery();
-        $dbquery->select('CONCAT(\'N\', e.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, e.`email`, e.`active` AS `subscribed`, e.`newsletter_date_add`');
+        $dbquery->select('CONCAT(\'N\', e.`id`) AS `id`, s.`name` AS `shop_name`, NULL AS `gender`, NULL AS `lastname`, NULL AS `firstname`, e.`email`, e.`active` AS `subscribed`, e.`newsletter_date_add`, l.`iso_code`');
         $dbquery->from('emailsubscription', 'e');
         $dbquery->leftJoin('shop', 's', 's.id_shop = e.id_shop');
+        $dbquery->leftJoin('lang', 'l', 'l.id_lang = e.id_lang');
         $dbquery->where('e.`active` = 1');
         if ($this->_searched_email) {
             $dbquery->where('e.`email` LIKE \'%'.pSQL($this->_searched_email).'%\' ');
