@@ -1176,7 +1176,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             $dbquery->leftJoin('gender', 'g', 'g.id_gender = c.id_gender');
             $dbquery->leftJoin('gender_lang', 'gl', 'g.id_gender = gl.id_gender AND gl.id_lang = '.$this->context->employee->id_lang);
             $dbquery->where('c.`newsletter` = '.($who == 3 ? 0 : 1));
-            $dbquery->leftJoin('lang', 'l', 'l.id_lang = c.id_lang')
+            $dbquery->leftJoin('lang', 'l', 'l.id_lang = c.id_lang');
             if ($optin == 2 || $optin == 1) {
                 $dbquery->where('c.`optin` = '.($optin == 1 ? 0 : 1));
             }
