@@ -45,6 +45,8 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     const LEGAL_PRIVACY = 'LEGAL_PRIVACY';
 
+    protected $_origin_newsletter;
+
     const TPL_COLUMN = 'ps_emailsubscription-column.tpl';
     const TPL_DEFAULT = 'ps_emailsubscription.tpl';
 
@@ -895,6 +897,37 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             return (bool) Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'emailsubscription WHERE id_shop=' . (int) $id_shop . ' AND email=\'' . pSQL($email) . "'");
         }
 
+        if ($params['newCustomer']->newsletter) {
+            if (Configuration::get('NW_CONFIRMATION_EMAIL')) {// send confirmation email
+                $this->sendConfirmationEmail($params['newCustomer']->email);
+            }
+            if ($code = Configuration::get('NW_VOUCHER_CODE')) {// send voucher
+                $this->sendVoucher($params['newCustomer']->email, $code);
+            }
+        }
+
+        return true;
+    }
+
+   public function hookActionObjectCustomerUpdateBefore($params)
+   {
+       $customer = new Customer($params['object']->id);
+       $this->_origin_newsletter = (int)$customer->newsletter;
+   }
+
+    public function hookActionCustomerAccountUpdate($params)
+    {
+        if (!$this->_origin_newsletter && $params['customer']->newsletter) {
+            if (Configuration::get('NW_CONFIRMATION_EMAIL')) {// send confirmation email
+                $this->sendConfirmationEmail($params['customer']->email);
+            }
+            if ($code = Configuration::get('NW_VOUCHER_CODE')) {
+                $cartRule = CartRuleCore::getCartsRuleByCode($code, Context::getContext()->language->id);
+                if (! Order::getDiscountsCustomer($params['customer']->id, $cartRule[0])) {// send voucher
+                    $this->sendVoucher($params['customer']->email, $code);
+                }
+            }
+        }
         return true;
     }
 
