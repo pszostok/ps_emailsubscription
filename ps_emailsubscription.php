@@ -115,7 +115,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             // 1.6 Module exist and was uninstalled
             Db::getInstance()->execute('RENAME TABLE `'._DB_PREFIX_.'newsletter` to `'._DB_PREFIX_.'emailsubscription`');
         } else {
-            Configuration::updateValue('PS_NEWSLETTER_RAND', rand().rand());
+            Configuration::updateValue('PS_NEWSLETTER_RAND', mt_rand() . mt_rand());
             Configuration::updateValue('NW_SALT', Tools::passwdGen(16));
         }
 
