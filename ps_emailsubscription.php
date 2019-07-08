@@ -108,6 +108,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                     'actionFrontControllerSetMedia',
                     'displayFooterBefore',
                     'actionCustomerAccountAdd',
+                    'actionObjectCustomerUpdateBefor',
                     'additionalCustomerFormFields',
                     'displayAdminCustomersForm',
                     'registerGDPRConsent',
@@ -917,17 +918,19 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     public function hookActionCustomerAccountUpdate($params)
     {
-        if (!$this->_origin_newsletter && $params['customer']->newsletter) {
-            if (Configuration::get('NW_CONFIRMATION_EMAIL')) {// send confirmation email
-                $this->sendConfirmationEmail($params['customer']->email);
-            }
-            if ($code = Configuration::get('NW_VOUCHER_CODE')) {
-                $cartRule = CartRuleCore::getCartsRuleByCode($code, Context::getContext()->language->id);
-                if (! Order::getDiscountsCustomer($params['customer']->id, $cartRule[0])) {// send voucher
-                    $this->sendVoucher($params['customer']->email, $code);
-                }
+        if ($this->_origin_newsletter || !$params['customer']->newsletter) {
+            return;
+        }
+        if (Configuration::get('NW_CONFIRMATION_EMAIL')) {// send confirmation email
+            $this->sendConfirmationEmail($params['customer']->email);
+        }
+        if ($code = Configuration::get('NW_VOUCHER_CODE')) {
+            $cartRule = CartRuleCore::getCartsRuleByCode($code, Context::getContext()->language->id);
+            if (! Order::getDiscountsCustomer($params['customer']->id, $cartRule[0])) {// send voucher
+                $this->sendVoucher($params['customer']->email, $code);
             }
         }
+
         return true;
     }
 
