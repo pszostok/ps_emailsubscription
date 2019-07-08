@@ -888,6 +888,9 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     {
         //if e-mail of the created user address has already been added to the newsletter through the ps_emailsubscription module,
         //we delete it from ps_emailsubscription table to prevent duplicates
+        if (empty($params['newCustomer'])) {
+            return;
+        }  
         $id_shop = $params['newCustomer']->id_shop;
         $email = $params['newCustomer']->email;
         if (Validate::isEmail($email)) {
