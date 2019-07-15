@@ -40,12 +40,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     const LEGAL_PRIVACY = 'LEGAL_PRIVACY';
 
-
-    private $templates = array (
-        'column' => 'ps_emailsubscription-column.tpl',
-        'default' => 'ps_emailsubscription.tpl',
-    );
-
     public function __construct(EntityManager $entity_manager)
     {
         $this->name = 'ps_emailsubscription';
@@ -232,7 +226,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             'iso_code' => array(
                 'title' => $this->trans('Iso language', array(), 'Modules.Emailsubscription.Admin'),
                 'search' => false,
-            ),
+            ),             
             'newsletter_date_add' => array(
                 'title' => $this->trans('Subscribed on', array(), 'Modules.Emailsubscription.Admin'),
                 'type' => 'date',
@@ -409,7 +403,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $dbquery->leftJoin('gender', 'g', 'g.id_gender = c.id_gender');
         $dbquery->leftJoin('gender_lang', 'gl', 'g.id_gender = gl.id_gender AND gl.id_lang = '.(int) $this->context->employee->id_lang);
         $dbquery->where('c.`newsletter` = 1');
-        $dbquery->leftJoin('lang', 'l', 'l.id_lang = c.id_lang');
+        $dbquery->leftJoin('lang', 'l', 'l.id_lang = c.id_lang');        
         if ($this->_searched_email) {
             $dbquery->where('c.`email` LIKE \'%'.pSQL($this->_searched_email).'%\' ');
         }
@@ -767,18 +761,10 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     public function renderWidget($hookName = null, array $configuration = [])
     {
-        if ($hookName == null && isset($configuration['hook'])) {
-            $hookName = $configuration['hook'];
-        }
-
-        $template_file = $this->templates['default'];
-        if ($hookName == 'displayLeftColumn') {
-            $template_file = $this->templates['column'];
-        }
         $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
         $this->context->smarty->assign(array('id_module' => $this->id));
 
-        return $this->fetch('module:ps_emailsubscription/views/templates/hook/'.$template_file);
+        return $this->fetch('module:ps_emailsubscription/views/templates/hook/ps_emailsubscription.tpl');
     }
 
     public function getWidgetVariables($hookName = null, array $configuration = [])
