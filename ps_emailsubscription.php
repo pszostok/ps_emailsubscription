@@ -33,6 +33,11 @@ use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
 class Ps_Emailsubscription extends Module implements WidgetInterface
 {
+    /**
+     * @var string Name of the module running on PS 1.6.x. Used for data migration.
+     */
+    const PS_16_EQUIVALENT_MODULE = 'blocknewsletter';
+
     const GUEST_NOT_REGISTERED = -1;
     const CUSTOMER_NOT_REGISTERED = 0;
     const GUEST_REGISTERED = 1;
@@ -91,7 +96,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     {
         if (
             !parent::install()
-            || !Configuration::updateValue('PS_NEWSLETTER_RAND', rand().rand())
             || !$this->registerHook(
                 array(
                     'displayFooterBefore',
@@ -107,8 +111,15 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             return false;
         }
 
-        Configuration::updateValue('NW_SALT', Tools::passwdGen(16));
+        if ($this->uninstallPrestaShop16Module()) {
+            // 1.6 Module exist and was uninstalled
+            Db::getInstance()->execute('RENAME TABLE `'._DB_PREFIX_.'newsletter` to `'._DB_PREFIX_.'emailsubscription`');
+        } else {
+            Configuration::updateValue('PS_NEWSLETTER_RAND', mt_rand() . mt_rand());
+            Configuration::updateValue('NW_SALT', Tools::passwdGen(16));
+        }
 
+        // New data
         $conditions = array();
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
@@ -136,6 +147,27 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         Db::getInstance()->execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'emailsubscription');
 
         return parent::uninstall();
+    }
+
+    /**
+     * Migrate data from 1.6 equivalent module (if applicable), then uninstall
+     */
+    public function uninstallPrestaShop16Module()
+    {
+        if (!Module::isInstalled(self::PS_16_EQUIVALENT_MODULE)) {
+            return false;
+        }
+        $oldModule = Module::getInstanceByName(self::PS_16_EQUIVALENT_MODULE);
+        if ($oldModule) {
+            // This closure calls the parent class to prevent data to be erased
+            // It allows the new module to be configured without migration
+            $parentUninstallClosure = function() {
+                return parent::uninstall();
+            };
+            $parentUninstallClosure = $parentUninstallClosure->bindTo($oldModule, get_class($oldModule));
+            $parentUninstallClosure();
+        }
+        return true;
     }
 
     public function getContent()
