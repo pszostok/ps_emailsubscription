@@ -340,9 +340,15 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     /**
      * Register in email subscription.
+     *
+     * @param string|null $hookName
+     * @return bool|string
      */
-    public function newsletterRegistration()
+    public function newsletterRegistration($hookName = null)
     {
+        if (empty($_POST['blockHookName']) || $_POST['blockHookName'] !== $hookName) {
+            return false;
+        }
         if (empty($_POST['email']) || !Validate::isEmail($_POST['email'])) {
             return $this->error = $this->trans('Invalid email address.', array(), 'Shop.Notifications.Error');
         } elseif ($_POST['action'] == '1') {
@@ -770,7 +776,10 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         $template_file = ($hookName == 'displayLeftColumn') ? self::TPL_COLUMN : self::TPL_DEFAULT;
         $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
-        $this->context->smarty->assign(array('id_module' => $this->id));
+        $this->context->smarty->assign(array(
+            'id_module' => $this->id,
+            'hookName' => $hookName
+        ));
 
         return $this->fetch('module:ps_emailsubscription/views/templates/hook/'.$template_file);
     }
@@ -778,17 +787,19 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     public function getWidgetVariables($hookName = null, array $configuration = [])
     {
         $variables = [];
-
-        $variables['value'] = Tools::getValue('email', '');
+        $variables['value'] = '';
         $variables['msg'] = '';
         $variables['conditions'] = Configuration::get('NW_CONDITIONS', $this->context->language->id);
 
         if (Tools::isSubmit('submitNewsletter')) {
-            $this->newsletterRegistration();
+            $this->error = $this->valid = '';
+            $this->newsletterRegistration($hookName);
             if ($this->error) {
+                $variables['value'] = Tools::getValue('email', '');
                 $variables['msg'] = $this->error;
                 $variables['nw_error'] = true;
             } elseif ($this->valid) {
+                $variables['value'] = Tools::getValue('email', '');
                 $variables['msg'] = $this->valid;
                 $variables['nw_error'] = false;
             }
