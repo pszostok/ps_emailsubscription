@@ -387,8 +387,12 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
      */
     public function newsletterRegistration($hookName = null)
     {
-        if (empty($_POST['blockHookName']) || $_POST['blockHookName'] !== $hookName) {
-            return false;
+        $isPrestaShopVersionOver177 = version_compare(_PS_VERSION_, '1.7.7', '>=');
+
+        if ($isPrestaShopVersionOver177) {
+            if (empty($_POST['blockHookName']) || $_POST['blockHookName'] !== $hookName) {
+                return false;
+            }
         }
 
         if (empty($_POST['email']) || !Validate::isEmail($_POST['email'])) {
