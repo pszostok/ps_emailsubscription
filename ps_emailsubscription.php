@@ -1,6 +1,6 @@
 <?php
-/*
-* 2007-2017 PrestaShop
+/**
+* 2007-2020 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2017 PrestaShop SA
+*  @copyright  2007-2020 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -68,7 +68,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         $this->entity_manager = $entity_manager;
 
-        $this->version = '2.5.1';
+        $this->version = '2.5.2';
         $this->author = 'PrestaShop';
         $this->error = false;
         $this->valid = false;
@@ -100,10 +100,10 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
     public function install()
     {
-        if (
-            !parent::install()
+        if (!parent::install()
             || !$this->registerHook(
                 array(
+                    'actionFrontControllerSetMedia',
                     'displayFooterBefore',
                     'actionCustomerAccountAdd',
                     'additionalCustomerFormFields',
@@ -207,7 +207,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             $id = Tools::getValue('id');
 
             if (preg_match('/(^N)/', $id)) {
-                $id = (int) substr($id, 1);
+                $id = (int) Tools::substr($id, 1);
                 $sql = 'UPDATE ' . _DB_PREFIX_ . 'emailsubscription SET active = 0 WHERE id = ' . $id;
                 Db::getInstance()->execute($sql);
             } else {
@@ -860,6 +860,15 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         }
 
         return $variables;
+    }
+
+    public function hookActionFrontControllerSetMedia()
+    {
+        Media::addJsDef([
+            'psemailsubscription_subscription' => $this->context->link->getModuleLink($this->name, 'subscription', [], true),
+        ]);
+
+        $this->context->controller->registerJavascript('modules-psemailsubscription', 'modules/' . $this->name . '/views/js/ps_emailsubscription.js');
     }
 
     /**
