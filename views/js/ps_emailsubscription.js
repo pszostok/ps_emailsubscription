@@ -27,7 +27,7 @@
 */
 
 $(document).ready(function () {
-    $('.block_newsletter form').on("submit", function () {
+    $('.block_newsletter form').on('submit', function () {
         if (psemailsubscription_subscription !== 'undefined') {
             var psemailsubscriptionForm = $(this);
             $('.block_newsletter_alert').remove();
