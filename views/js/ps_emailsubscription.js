@@ -30,6 +30,7 @@ $(document).ready(function () {
     $('.block_newsletter form').on("submit", function () {
         if (psemailsubscription_subscription !== 'undefined') {
             var psemailsubscriptionForm = $(this);
+            $('.block_newsletter_alert').remove();
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
@@ -37,12 +38,10 @@ $(document).ready(function () {
                 cache: false,
                 data: $(this).serialize(),
                 success: function (data) {
-                    console.log(data);
                     if (data.nw_error) {
-                        console.log('<p class="alert alert-danger">' + data.msg + '</p>');
-                        psemailsubscriptionForm.prepend('<p class="alert alert-danger">' + data.msg + '</p>');
+                        psemailsubscriptionForm.prepend('<p class="alert alert-danger block_newsletter_alert">' + data.msg + '</p>');
                     } else {
-                        psemailsubscriptionForm.prepend('<p class="alert alert-success">' + data.msg + '</p>');
+                        psemailsubscriptionForm.prepend('<p class="alert alert-success block_newsletter_alert">' + data.msg + '</p>');
 
                     }
                 },
