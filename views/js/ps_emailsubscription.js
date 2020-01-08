@@ -28,7 +28,7 @@
 
 $(document).ready(function () {
     $('.block_newsletter form').on('submit', function () {
-        if (psemailsubscription_subscription !== 'undefined') {
+        if (typeof psemailsubscription_subscription !== 'undefined') {
             var psemailsubscriptionForm = $(this);
             $('.block_newsletter_alert').remove();
             $.ajax({
@@ -42,7 +42,6 @@ $(document).ready(function () {
                         psemailsubscriptionForm.prepend('<p class="alert alert-danger block_newsletter_alert">' + data.msg + '</p>');
                     } else {
                         psemailsubscriptionForm.prepend('<p class="alert alert-success block_newsletter_alert">' + data.msg + '</p>');
-
                     }
                 },
                 error: function (err) {
