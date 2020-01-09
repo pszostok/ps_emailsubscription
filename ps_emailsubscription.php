@@ -469,6 +469,16 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 }
             }
         }
+        // hook 
+        Hook::exec(
+            'actionNewsletterRegistrationAfter', 
+            [
+                'hookName' => $hookName, 
+                'email' => $_POST['email'], 
+                'action' => $_POST['action'], 
+                'error' => $this->error,
+            ]
+        );
     }
 
     public function getSubscribers()
