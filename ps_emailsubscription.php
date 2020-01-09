@@ -400,7 +400,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         // hook for newsletter registration/unregistration : fill-in hookError string is there is an error
         $hookError = null;
         Hook::exec(
-            'actionNewsletterRegistration', 
+            'actionNewsletterRegistrationBefore', 
             [
                 'hookName' => $hookName, 
                 'email' => $_POST['email'], 
