@@ -476,7 +476,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'hookName' => $hookName, 
                 'email' => $_POST['email'], 
                 'action' => $_POST['action'], 
-                'error' => $this->error,
+                'error' => &$this->error,
             ]
         );
     }
