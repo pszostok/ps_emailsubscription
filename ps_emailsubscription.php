@@ -408,7 +408,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'hookError' => &$hookError,
             ]
         );
-        if ($hookError) {
+        if ($hookError !== null) {
             return $this->error = $hookError;
         }
 
