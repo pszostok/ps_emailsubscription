@@ -4,6 +4,10 @@
 
 Adds a block for newsletter subscription.
 
+## Multistore compatibility
+
+This module is not completely compatible with the multistore, some features are not available with the multistore
+
 ## Reporting issues
 
 You can report issues with this module in the main PrestaShop repository. [Click here to report an issue][report-issue]. 
