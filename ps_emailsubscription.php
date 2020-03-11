@@ -876,7 +876,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $id_shop = $params['newCustomer']->id_shop;
         $email = $params['newCustomer']->email;
         if (Validate::isEmail($email)) {
-            if ($code = Configuration::get('NW_VOUCHER_CODE')) {
+            if ($params['newCustomer']->newsletter && $code = Configuration::get('NW_VOUCHER_CODE')) {
                 $this->sendVoucher($email, $code);
             }
 
