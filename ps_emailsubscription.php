@@ -381,7 +381,9 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     /**
      * Register in email subscription.
      *
-     * @param string|null $hookName
+     * @param string|null $hookName For widgets displayed by a hook, hook name must be passed
+     * as multiple hooks might be used, so it is necessary to know which one was used for
+     * submitting the form
      *
      * @return bool|string
      */
@@ -389,11 +391,12 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     {
         $isPrestaShopVersionOver177 = version_compare(_PS_VERSION_, '1.7.7', '>=');
 
-        if ($isPrestaShopVersionOver177) {
+        if ($isPrestaShopVersionOver177 && ($hookName !== null)) {
             if (empty($_POST['blockHookName']) || $_POST['blockHookName'] !== $hookName) {
                 return false;
             }
         }
+
 
         if (empty($_POST['email']) || !Validate::isEmail($_POST['email'])) {
             return $this->error = $this->trans('Invalid email address.', array(), 'Shop.Notifications.Error');
