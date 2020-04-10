@@ -890,9 +890,10 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         //we delete it from ps_emailsubscription table to prevent duplicates
         if (empty($params['newCustomer'])) {
             return;
-        }  
+        }
         $id_shop = $params['newCustomer']->id_shop;
         $email = $params['newCustomer']->email;
+        $newsletter =$params['newCustomer']->newsletter;
         if (Validate::isEmail($email)) {
             if ($params['newCustomer']->newsletter && $code = Configuration::get('NW_VOUCHER_CODE')) {
                 $this->sendVoucher($email, $code);
@@ -901,7 +902,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             return (bool) Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'emailsubscription WHERE id_shop=' . (int) $id_shop . ' AND email=\'' . pSQL($email) . "'");
         }
 
-        if ($params['newCustomer']->newsletter) {
+        if ($newsletter) {
             if (Configuration::get('NW_CONFIRMATION_EMAIL')) {// send confirmation email
                 $this->sendConfirmationEmail($params['newCustomer']->email);
             }
