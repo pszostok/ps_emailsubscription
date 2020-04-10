@@ -1,5 +1,6 @@
-{*
-* 2007-2016 PrestaShop
+<?php
+/*
+* 2007-2020 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,24 +19,16 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2016 PrestaShop SA
+*  @copyright  2007-2020 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
-*}
+*/
 
-<div class="email_subscription block_newsletter" id="blockEmailSubscription_{$hookName}">
-  <h4>{l s='Newsletter' d='Modules.Emailsubscription.Shop'}</h4>
-  {if $msg}
-    <p class="notification {if $nw_error}notification-error{else}notification-success{/if}">{$msg}</p>
-  {/if}
-  <form action="{$urls.current_url}#blockEmailSubscription_{$hookName}" method="post">
-    <input type="text" name="email" value="{$value}" placeholder="{l s='Your e-mail' d='Modules.Emailsubscription.Shop'}" />
-    {if $conditions}
-      <p>{$conditions nofilter}</p>
-    {/if}
-    <input type="hidden" name="blockHookName" value="{$hookName}" />
-    <input type="submit" name="submitNewsletter" value="ok" />
-    {hook h='displayGDPRConsent' id_module=$id_module}
-    <input type="hidden" name="action" value="0" />
-  </form>
-</div>
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+function upgrade_module_2_5_2($object)
+{
+    return $object->registerHook('actionFrontControllerSetMedia');
+}

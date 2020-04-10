@@ -23,13 +23,13 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div class="email_subscription" id="blockEmailSubscription_{$hookName}">
+<div class="email_subscription block_newsletter" id="blockEmailSubscription_{$hookName}">
   <h4>{l s='Newsletter' d='Modules.Emailsubscription.Shop'}</h4>
   {if $msg}
     <p class="notification {if $nw_error}notification-error{else}notification-success{/if}">{$msg}</p>
   {/if}
   <form action="{$urls.current_url}#blockEmailSubscription_{$hookName}" method="post">
-    <input type="email" name="email" value="{$value}" placeholder="{l s='Your e-mail' d='Modules.Emailsubscription.Shop'}" required />
+    <input type="text" name="email" value="{$value}" placeholder="{l s='Your e-mail' d='Modules.Emailsubscription.Shop'}" />
     {if $conditions}
       <p>{$conditions nofilter}</p>
     {/if}
