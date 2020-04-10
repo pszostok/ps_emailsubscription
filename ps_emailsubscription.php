@@ -108,7 +108,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                     'actionFrontControllerSetMedia',
                     'displayFooterBefore',
                     'actionCustomerAccountAdd',
-                    'actionObjectCustomerUpdateBefor',
+                    'actionObjectCustomerUpdateBefore',
                     'additionalCustomerFormFields',
                     'displayAdminCustomersForm',
                     'registerGDPRConsent',
