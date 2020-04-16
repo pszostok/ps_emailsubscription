@@ -70,7 +70,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         $this->entity_manager = $entity_manager;
 
-        $this->version = '2.5.2';
+        $this->version = '2.5.3';
         $this->author = 'PrestaShop';
         $this->error = false;
         $this->valid = false;
@@ -893,7 +893,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         }
         $id_shop = $params['newCustomer']->id_shop;
         $email = $params['newCustomer']->email;
-        $newsletter =$params['newCustomer']->newsletter;
+        $newsletter = $params['newCustomer']->newsletter;
         if (Validate::isEmail($email)) {
             if ($params['newCustomer']->newsletter && $code = Configuration::get('NW_VOUCHER_CODE')) {
                 $this->sendVoucher($email, $code);
