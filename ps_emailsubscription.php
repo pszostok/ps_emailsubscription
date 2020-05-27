@@ -114,6 +114,8 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                     'registerGDPRConsent',
                     'actionDeleteGDPRCustomer',
                     'actionExportGDPRData',
+                    'actionCustomerAccountUpdate',
+                    'actionObjectCustomerUpdateBefore',
                 )
             )
         ) {
