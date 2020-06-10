@@ -401,6 +401,20 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             }
         }
 
+        // hook for newsletter registration/unregistration : fill-in hookError string is there is an error
+        $hookError = null;
+        Hook::exec(
+            'actionNewsletterRegistrationBefore', 
+            [
+                'hookName' => $hookName, 
+                'email' => $_POST['email'], 
+                'action' => $_POST['action'], 
+                'hookError' => &$hookError,
+            ]
+        );
+        if ($hookError !== null) {
+            return $this->error = $hookError;
+        }
 
         if (empty($_POST['email']) || !Validate::isEmail($_POST['email'])) {
             return $this->error = $this->trans('Invalid email address.', array(), 'Shop.Notifications.Error');
@@ -459,6 +473,16 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 }
             }
         }
+        // hook 
+        Hook::exec(
+            'actionNewsletterRegistrationAfter', 
+            [
+                'hookName' => $hookName, 
+                'email' => $_POST['email'], 
+                'action' => $_POST['action'], 
+                'error' => &$this->error,
+            ]
+        );
     }
 
     public function getSubscribers()

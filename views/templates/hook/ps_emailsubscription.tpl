@@ -33,6 +33,7 @@
     {if $conditions}
       <p>{$conditions nofilter}</p>
     {/if}
+    {hook h='displayNewsletterRegistration'}
     <input type="hidden" value="{$hookName}" name="blockHookName" />
     <input type="submit" value="ok" name="submitNewsletter" />
     {hook h='displayGDPRConsent' id_module=$id_module}
