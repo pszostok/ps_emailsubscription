@@ -70,7 +70,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         $this->entity_manager = $entity_manager;
 
-        $this->version = '2.5.3';
+        $this->version = '2.6.0';
         $this->author = 'PrestaShop';
         $this->error = false;
         $this->valid = false;
@@ -404,11 +404,11 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         // hook for newsletter registration/unregistration : fill-in hookError string is there is an error
         $hookError = null;
         Hook::exec(
-            'actionNewsletterRegistrationBefore', 
+            'actionNewsletterRegistrationBefore',
             [
-                'hookName' => $hookName, 
-                'email' => $_POST['email'], 
-                'action' => $_POST['action'], 
+                'hookName' => $hookName,
+                'email' => $_POST['email'],
+                'action' => $_POST['action'],
                 'hookError' => &$hookError,
             ]
         );
@@ -473,13 +473,13 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 }
             }
         }
-        // hook 
+        // hook
         Hook::exec(
-            'actionNewsletterRegistrationAfter', 
+            'actionNewsletterRegistrationAfter',
             [
-                'hookName' => $hookName, 
-                'email' => $_POST['email'], 
-                'action' => $_POST['action'], 
+                'hookName' => $hookName,
+                'email' => $_POST['email'],
+                'action' => $_POST['action'],
                 'error' => &$this->error,
             ]
         );
