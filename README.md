@@ -7,7 +7,7 @@
 
 ## About
 
-Adds a block for newsletter subscription.
+Keep in touch with your customers the way you want, add a form to the homepage of your store and allow all the curious to subscribe to your newsletter.
 
 ## Multistore compatibility
 
