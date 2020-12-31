@@ -1444,7 +1444,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     {
         if (!Tools::isEmpty($customer['email']) && Validate::isEmail($customer['email'])) {
             $sql = 'SELECT * FROM ' . _DB_PREFIX_ . "emailsubscription WHERE email = '" . pSQL($customer['email']) . "'";
-            if ($res = Db::getInstance()->ExecuteS($sql)) {
+            if ($res = Db::getInstance()->executeS($sql)) {
                 return json_encode($res);
             }
 
