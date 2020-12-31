@@ -1119,7 +1119,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'hint' => $this->trans('Customers can subscribe to your newsletter when registering, or by entering their email in the newsletter form.', array(), 'Modules.Emailsubscription.Admin'),
                         'name' => 'SUSCRIBERS',
                         'required' => false,
-                        'default_value' => (int) $this->context->country->id,
+                        'default_value' => 0,
                         'options' => array(
                             'query' => array(
                                 array('id' => 0, 'name' => $this->trans('All subscribers', array(), 'Modules.Emailsubscription.Admin')),
@@ -1138,7 +1138,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'hint' => $this->trans('Partner offers subscribers have agreed to receive your partners\' offers.', array(), 'Modules.Emailsubscription.Admin'),
                         'name' => 'OPTIN',
                         'required' => false,
-                        'default_value' => (int) $this->context->country->id,
+                        'default_value' => 0,
                         'options' => array(
                             'query' => array(
                                 array('id' => 0, 'name' => $this->trans('All customers', array(), 'Modules.Emailsubscription.Admin')),
@@ -1169,7 +1169,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $lang = new Language((int) Configuration::get('PS_LANG_DEFAULT'));
         $helper->default_form_language = $lang->id;
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
-        $helper->id = (int) Tools::getValue('id_carrier');
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'btnSubmit';
         $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
