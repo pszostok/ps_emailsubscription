@@ -1119,7 +1119,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'hint' => $this->trans('Customers can subscribe to your newsletter when registering, or by entering their email in the newsletter form.', array(), 'Modules.Emailsubscription.Admin'),
                         'name' => 'SUSCRIBERS',
                         'required' => false,
-                        'default_value' => 0,
+                        'default_value' => 1,
                         'options' => array(
                             'query' => array(
                                 array('id' => 0, 'name' => $this->trans('All subscribers', array(), 'Modules.Emailsubscription.Admin')),
@@ -1138,7 +1138,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                         'hint' => $this->trans('Partner offers subscribers have agreed to receive your partners\' offers.', array(), 'Modules.Emailsubscription.Admin'),
                         'name' => 'OPTIN',
                         'required' => false,
-                        'default_value' => 0,
+                        'default_value' => 1,
                         'options' => array(
                             'query' => array(
                                 array('id' => 0, 'name' => $this->trans('All customers', array(), 'Modules.Emailsubscription.Admin')),
