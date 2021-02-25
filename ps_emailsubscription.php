@@ -977,7 +977,9 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             array(
                 '[1]' => '<br>',
                 '[2]' => '<em>',
-                '%conditions%' => Configuration::get('NW_CONDITIONS', $this->context->language->id),
+                '%conditions%' => Tools::htmlentitiesUTF8(
+                    Configuration::get('NW_CONDITIONS', $this->context->language->id)
+                ),
                 '[/2]' => '</em>',
             ),
             'Modules.Emailsubscription.Shop'
