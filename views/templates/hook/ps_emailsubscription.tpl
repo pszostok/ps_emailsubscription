@@ -31,7 +31,7 @@
   <form action="{$urls.current_url}#blockEmailSubscription_{$hookName}" method="post">
     <input type="email" name="email" value="{$value}" placeholder="{l s='Your e-mail' d='Modules.Emailsubscription.Shop'}" required />
     {if $conditions}
-      <p>{$conditions nofilter}</p>
+      <p>{$conditions}</p>
     {/if}
     {hook h='displayNewsletterRegistration'}
     <input type="hidden" value="{$hookName}" name="blockHookName" />
