@@ -25,4 +25,4 @@ docker run --rm --volumes-from temp-ps \
        -e _PS_ROOT_DIR_=/var/www/html \
        --workdir=/var/www/html/modules/ps_emailsubscription phpstan/phpstan:0.12 \
        analyse \
-       --configuration=/var/www/html/modules/ps_emailsubscription/tests/phpstan-$PS_VERSION.neon
+       --configuration=/var/www/html/modules/ps_emailsubscription/tests/phpstan/phpstan-$PS_VERSION.neon
