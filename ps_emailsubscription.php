@@ -341,7 +341,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         return $helper_list->generateList($subscribers, $fields_list);
     }
 
-    public function displayViewCustomerLink($token = null, $id, $name = null)
+    public function displayViewCustomerLink($token = null, $id = null, $name = null)
     {
         $this->smarty->assign([
             'href' => 'index.php?controller=AdminCustomers&id_customer=' . (int) $id . '&updatecustomer&token=' . Tools::getAdminTokenLite('AdminCustomers'),
@@ -363,7 +363,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         return $this->display(__FILE__, 'views/templates/admin/list_action_enable.tpl');
     }
 
-    public function displayUnsubscribeLink($token = null, $id, $name = null)
+    public function displayUnsubscribeLink($token = null, $id = null, $name = null)
     {
         $this->smarty->assign([
             'href' => $this->_helperlist->currentIndex . '&subscribedcustomer&' . $this->_helperlist->identifier . '=' . $id . '&token=' . $token,
