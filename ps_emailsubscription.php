@@ -750,6 +750,16 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             $this->sendConfirmationEmail($email);
         }
 
+        Hook::exec(
+            'actionNewsletterRegistrationAfter',
+            [
+                'hookName' => null,
+                'email' => $email,
+                'action' => '0',
+                'error' => &$this->error,
+            ]
+        );
+
         return $this->trans('Thank you for subscribing to our newsletter.', [], 'Modules.Emailsubscription.Shop');
     }
 
