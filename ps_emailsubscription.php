@@ -41,8 +41,8 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     const GUEST_REGISTERED = 1;
     const CUSTOMER_REGISTERED = 2;
 
-    public const NEWSLETTER_SUBSCRIPTION = 0;
-    public const NEWSLETTER_UNSUBSCRIPTION = 1;
+    const NEWSLETTER_SUBSCRIPTION = 0;
+    const NEWSLETTER_UNSUBSCRIPTION = 1;
 
     const LEGAL_PRIVACY = 'LEGAL_PRIVACY';
 
