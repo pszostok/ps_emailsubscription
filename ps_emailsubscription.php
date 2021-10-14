@@ -441,6 +441,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'email' => $_POST['email'],
                 'action' => $_POST['action'],
                 'hookError' => &$hookError,
+                'module' => $this->name,
             ]
         );
         /** @var string|null $hookError */
@@ -508,6 +509,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'email' => $_POST['email'],
                 'action' => $_POST['action'],
                 'error' => &$this->error,
+                'module' => $this->name,
             ]
         );
 
@@ -760,6 +762,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'email' => $email,
                 'action' => static::NEWSLETTER_SUBSCRIPTION,
                 'error' => &$this->error,
+                'module' => $this->name,
             ]
         );
 
