@@ -758,7 +758,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             [
                 'hookName' => null,
                 'email' => $email,
-                'action' => self::NEWSLETTER_SUBSCRIPTION,
+                'action' => static::NEWSLETTER_SUBSCRIPTION,
                 'error' => &$this->error,
             ]
         );
