@@ -462,7 +462,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             }
 
             return $this->valid = $this->trans('Unsubscription successful.', [], 'Modules.Emailsubscription.Shop');
-        } elseif ($_POST['action'] == self::NEWSLETTER_SUBSCRIPTION) {
+        } elseif ($_POST['action'] == static::NEWSLETTER_SUBSCRIPTION) {
             $register_status = $this->isNewsletterRegistered($_POST['email']);
             if ($register_status > 0) {
                 return $this->error = $this->trans('This email address is already registered.', [], 'Modules.Emailsubscription.Shop');
