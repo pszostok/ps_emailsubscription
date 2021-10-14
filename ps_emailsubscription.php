@@ -450,7 +450,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         if (empty($_POST['email']) || !Validate::isEmail($_POST['email'])) {
             return $this->error = $this->trans('Invalid email address.', [], 'Shop.Notifications.Error');
-        } elseif ($_POST['action'] == self::NEWSLETTER_UNSUBSCRIPTION) {
+        } elseif ($_POST['action'] == static::NEWSLETTER_UNSUBSCRIPTION) {
             $register_status = $this->isNewsletterRegistered($_POST['email']);
 
             if ($register_status < 1) {
