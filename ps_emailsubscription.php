@@ -41,6 +41,9 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     const GUEST_REGISTERED = 1;
     const CUSTOMER_REGISTERED = 2;
 
+    public const NEWSLETTER_SUBSCRIPTION = 0;
+    public const NEWSLETTER_UNSUBSCRIPTION = 1;
+
     const LEGAL_PRIVACY = 'LEGAL_PRIVACY';
 
     protected $_origin_newsletter;
@@ -447,7 +450,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         if (empty($_POST['email']) || !Validate::isEmail($_POST['email'])) {
             return $this->error = $this->trans('Invalid email address.', [], 'Shop.Notifications.Error');
-        } elseif ($_POST['action'] == '1') {
+        } elseif ($_POST['action'] == self::NEWSLETTER_UNSUBSCRIPTION) {
             $register_status = $this->isNewsletterRegistered($_POST['email']);
 
             if ($register_status < 1) {
@@ -459,7 +462,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             }
 
             return $this->valid = $this->trans('Unsubscription successful.', [], 'Modules.Emailsubscription.Shop');
-        } elseif ($_POST['action'] == '0') {
+        } elseif ($_POST['action'] == self::NEWSLETTER_SUBSCRIPTION) {
             $register_status = $this->isNewsletterRegistered($_POST['email']);
             if ($register_status > 0) {
                 return $this->error = $this->trans('This email address is already registered.', [], 'Modules.Emailsubscription.Shop');
@@ -755,7 +758,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             [
                 'hookName' => null,
                 'email' => $email,
-                'action' => '0',
+                'action' => self::NEWSLETTER_SUBSCRIPTION,
                 'error' => &$this->error,
             ]
         );
