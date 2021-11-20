@@ -41,6 +41,9 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     const GUEST_REGISTERED = 1;
     const CUSTOMER_REGISTERED = 2;
 
+    const NEWSLETTER_SUBSCRIPTION = 0;
+    const NEWSLETTER_UNSUBSCRIPTION = 1;
+
     const LEGAL_PRIVACY = 'LEGAL_PRIVACY';
 
     protected $_origin_newsletter;
@@ -438,6 +441,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'email' => $_POST['email'],
                 'action' => $_POST['action'],
                 'hookError' => &$hookError,
+                'module' => $this->name,
             ]
         );
         /** @var string|null $hookError */
@@ -447,7 +451,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
 
         if (empty($_POST['email']) || !Validate::isEmail($_POST['email'])) {
             return $this->error = $this->trans('Invalid email address.', [], 'Shop.Notifications.Error');
-        } elseif ($_POST['action'] == '1') {
+        } elseif ($_POST['action'] == static::NEWSLETTER_UNSUBSCRIPTION) {
             $register_status = $this->isNewsletterRegistered($_POST['email']);
 
             if ($register_status < 1) {
@@ -459,7 +463,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             }
 
             return $this->valid = $this->trans('Unsubscription successful.', [], 'Modules.Emailsubscription.Shop');
-        } elseif ($_POST['action'] == '0') {
+        } elseif ($_POST['action'] == static::NEWSLETTER_SUBSCRIPTION) {
             $register_status = $this->isNewsletterRegistered($_POST['email']);
             if ($register_status > 0) {
                 return $this->error = $this->trans('This email address is already registered.', [], 'Modules.Emailsubscription.Shop');
@@ -505,6 +509,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
                 'email' => $_POST['email'],
                 'action' => $_POST['action'],
                 'error' => &$this->error,
+                'module' => $this->name,
             ]
         );
 
@@ -749,6 +754,17 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         if (Configuration::get('NW_CONFIRMATION_EMAIL')) {
             $this->sendConfirmationEmail($email);
         }
+
+        Hook::exec(
+            'actionNewsletterRegistrationAfter',
+            [
+                'hookName' => null,
+                'email' => $email,
+                'action' => static::NEWSLETTER_SUBSCRIPTION,
+                'error' => &$this->error,
+                'module' => $this->name,
+            ]
+        );
 
         return $this->trans('Thank you for subscribing to our newsletter.', [], 'Modules.Emailsubscription.Shop');
     }
