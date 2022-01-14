@@ -91,6 +91,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     public function __construct()
     {
         $this->name = 'ps_emailsubscription';
+        $this->tab = 'pricing_promotion';
         $this->need_instance = 0;
 
         $this->controllers = ['verification', 'subscription'];
