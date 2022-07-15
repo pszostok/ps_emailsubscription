@@ -80,10 +80,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
      */
     public $post_errors;
     /**
-     * @var array
-     */
-    public $post_valid;
-    /**
      * @var HelperList
      */
     public $_helperlist;
@@ -119,19 +115,6 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $this->_searched_email = null;
 
         $this->_html = '';
-        if ($this->id) {
-            $this->file = 'export_' . Configuration::get('PS_NEWSLETTER_RAND') . '.csv';
-            $this->post_valid = [];
-
-            // Getting data...
-            $countries = Country::getCountries($this->context->language->id);
-
-            // ...formatting array
-            $countries_list = [$this->trans('All countries', [], 'Admin.Global')];
-            foreach ($countries as $country) {
-                $countries_list[$country['id_country']] = $country['name'];
-            }
-        }
     }
 
     public function install()
@@ -1298,6 +1281,15 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     {
         if (!isset($this->context)) {
             $this->context = Context::getContext();
+        }
+
+        $this->file = 'export_' . Configuration::get('PS_NEWSLETTER_RAND') . '.csv';
+        // Getting data...
+        $countries = Country::getCountries($this->context->language->id);
+        // ...formatting array
+        $countries_list = [$this->trans('All countries', [], 'Admin.Global')];
+        foreach ($countries as $country) {
+            $countries_list[$country['id_country']] = $country['name'];
         }
 
         $result = $this->getCustomers();
