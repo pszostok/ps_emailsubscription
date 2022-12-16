@@ -1007,6 +1007,7 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
         $label = $this->trans(
             'Sign up for our newsletter[1][2]%conditions%[/2]',
             [
+                '_raw' => true,
                 '[1]' => '<br>',
                 '[2]' => '<em>',
                 '%conditions%' => Tools::htmlentitiesUTF8(
