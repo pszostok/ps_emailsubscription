@@ -9,6 +9,10 @@
 
 Keep in touch with your customers the way you want, add a form to the homepage of your store and allow all the curious to subscribe to your newsletter.
 
+## Compatibility
+
+PrestaShop: `1.7.1.0` or later
+
 ## Multistore compatibility
 
 This module is partially compatible with the multistore feature. Some of its options might not be available.
