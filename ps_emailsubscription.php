@@ -153,6 +153,9 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
             $conditions[(int) $lang['id_lang']] = $this->getConditionFixtures($lang);
         }
         Configuration::updateValue('NW_CONDITIONS', $conditions, true);
+        Configuration::updateValue('NW_VERIFICATION_EMAIL', false);
+        Configuration::updateValue('NW_CONFIRMATION_EMAIL', false);
+        Configuration::updateValue('NW_VOUCHER_CODE', '');
 
         return Db::getInstance()->execute('
         CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'emailsubscription` (
