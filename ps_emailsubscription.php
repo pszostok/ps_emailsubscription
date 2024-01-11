@@ -206,8 +206,8 @@ class Ps_Emailsubscription extends Module implements WidgetInterface
     public function getContent()
     {
         if (Tools::isSubmit('submitUpdate')) {
-            Configuration::updateValue('NW_CONFIRMATION_EMAIL', (bool) Tools::getValue('NW_CONFIRMATION_EMAIL'));
-            Configuration::updateValue('NW_VERIFICATION_EMAIL', (bool) Tools::getValue('NW_VERIFICATION_EMAIL'));
+            Configuration::updateValue('NW_CONFIRMATION_EMAIL', (int) Tools::getValue('NW_CONFIRMATION_EMAIL'));
+            Configuration::updateValue('NW_VERIFICATION_EMAIL', (int) Tools::getValue('NW_VERIFICATION_EMAIL'));
 
             $conditions = [];
             $languages = Language::getLanguages(false);
