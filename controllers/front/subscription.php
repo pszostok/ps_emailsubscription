@@ -54,7 +54,11 @@ class Ps_EmailsubscriptionSubscriptionModuleFrontController extends ModuleFrontC
 
             if ($this->ajax) {
                 header('Content-Type: application/json');
-                $this->ajaxDie(json_encode($this->variables));
+                if (version_compare(_PS_VERSION_, '1.7.5', '>=')) {
+                    $this->ajaxRender(json_encode($this->variables));
+                } else {
+                    $this->ajaxDie(json_encode($this->variables));
+                }
             }
         }
     }
